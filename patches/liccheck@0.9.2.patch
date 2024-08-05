@@ -1,0 +1,25 @@
+diff -ruN liccheck_orig/___PATCHED___.txt liccheck/___PATCHED___.txt
+--- liccheck_orig/___PATCHED___.txt	1970-01-01 03:00:00.000000000 +0300
++++ liccheck/___PATCHED___.txt	2023-11-18 10:52:06.636127961 +0300
+@@ -0,0 +1 @@
++patched
+diff -ruN liccheck_orig/command_line.py liccheck/command_line.py
+--- liccheck_orig/command_line.py	2023-11-18 10:53:29.952676736 +0300
++++ liccheck/command_line.py	2023-11-18 10:52:06.636127961 +0300
+@@ -464,6 +464,16 @@
+ 
+     directory = tempfile.mkdtemp(prefix="liccheck_")
+     requirements_txt_file = directory + "/requirements.txt"
++
++    try:
++        import subprocess
++        extra_dependencies_str = "" if not extra_dependencies else f"--with={','.join(extra_dependencies)}"
++        subprocess.run(f"poetry export --without-hashes --without-urls --no-interaction {extra_dependencies_str} --format=requirements.txt > {requirements_txt_file}", stdout=subprocess.PIPE, shell=True)
++    except:
++        pass
++    else:
++        return requirements_txt_file
++
+     with open(requirements_txt_file, "w") as f:
+         ptoml = toml.load("pyproject.toml")
+         project = ptoml.get("project", {})

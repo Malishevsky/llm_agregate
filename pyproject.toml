@@ -1,0 +1,631 @@
+#####################################################################################################
+# general
+#####################################################################################################
+
+# see https://github.com/carlosperate/awesome-pyproject/
+
+[tool.poetry]
+name = 'llm-agregate'
+version = '1.1.2'
+description = 'Agregate info'
+authors = ['Lingvanex <info@lingvanex.com>']
+readme = 'README.md'
+homepage = 'https://lingvanex.com'
+repository = 'https://github.com:Malishevsky/llm_agregate.git'
+
+[project.license]
+text = 'Proprietary'
+
+[build-system]
+requires = ['poetry-core>=1.6.0']
+build-backend = 'poetry.core.masonry.api'
+
+#####################################################################################################
+# dependencies
+#####################################################################################################
+
+[tool.poetry.group.for_patcher_in_docker.dependencies]
+pip = '^24.0'  # pip нужен для коректной работы create_patch.py и patch.py при сборке в докере
+
+[tool.poetry.dependencies]
+python = '>=3.11,<3.12'
+
+elastic-apm = '^6.22.3'
+elasticsearch = '^8.14.0'
+
+environs = '^11.0.0'
+coloredlogs = '^15.0.1'
+hypercorn = {extras = ['uvloop'], version = '^0.17.3'}
+setproctitle = '^1.3.3'
+aiohttp = {extras = ['speedups'], version = '^3.9.5'}
+orjson = '^3.10.6'
+aiofiles = '^24.1.0'
+cryptography = '^43.0.0'
+python-dateutil = '^2.9.0.post0'
+certifi = '^2024.7.4'
+semantic-version = '^2.10.0'
+py-cpuinfo = '^9.0.0'
+nicegui = '^1.4.30'
+
+argon2-cffi = '^23.1.0'
+
+python-docx = '^1.1.2'
+
+python-multipart = '^0.0.9'  # need for https://github.com/encode/starlette/blob/0.31.1/starlette/requests.py#L14
+
+[tool.poetry.group.dev.dependencies]
+# tests
+pytest = '^8.2.1'
+mockito = '^1.5.0'
+factory-boy = '^3.3.0'
+Faker = '^23.2.1'
+mimesis = '^14.0.0'
+fluentcheck = '^0.2.0'
+# https://docs.pytest.org/en/latest/reference/plugin_list.html
+# https://github.com/augustogoulart/awesome-pytest/blob/864e4555cc94a83d1de60c8568df37eb505ccb65/README.md
+pytest-cov = '^4.1.0'
+pytest-asyncio = '^0.23.7'
+pytest-sugar = '^1.0.0'
+pytest-socket = '^0.7.0'
+pytest-clarity = '^1.0.1'
+pytest-html-reporter = '^0.2.9'
+pytest-modified-env = '^0.1.0'
+pytest-order = '^1.2.0'
+pytest-dependency = '^0.6.0'
+pytest-deadfixtures = '^2.2.1'
+pytest-randomly = '^3.15.0'
+pytest-lazy-fixture = '^0.6.3'
+pytest-freezegun = '^0.4.2'
+pytest-metadata = '^3.1.1'
+pytest-benchmark = '^4.0.0'
+pytest-testmon = '^2.1.1'
+pytest-datadir = '^1.5.0'
+pytest-bdd = '^7.1.2'
+pytest-recording = '^0.13.1'
+pytest-timeout = '^2.3.1'
+
+# TODO: https://pypi.org/project/hypothesis/
+
+# TODO: https://pypi.org/project/overrides/
+
+# pylint lint
+pylint = '^3.2.6'
+
+# flake8 lint
+# see https://github.com/DmytroLitvinov/awesome-flake8-extensions/tree/9bf0ce23d33df67d4cab6b6b3b63a6a0be98bb0e
+wemake-python-styleguide = '^0.18.0'
+# TODO: добавить flakeheaven когда будет исправлен этот баг https://github.com/flakeheaven/flakeheaven/issues/132
+yesqa = '^1.5.0'
+dlint = '^0.14.1'
+flake8-pie = '^0.16.0'
+flake8-pyproject = '^1.2.3'
+flake8-simplify = '^0.21.0'
+flake8-annotations-coverage = '^0.0.6'
+flake8-builtins = '^2.2.0'
+flake8-variables-names = '^0.0.6'
+flake8-expression-complexity = '^0.0.11'
+flake8-pytest = '^1.4'
+flake8-pytest-style = '^1.7.2'
+flake8-coding = '^1.3.2'
+flake8-class-attributes-order = '^0.1.3'
+flake8-mutable = '^1.2.0'
+flake8-pyi = '^24.3.0'
+# TODO: https://beta.ruff.rs/docs/rules/
+# TODO: flake8-warnings = '^0.4.0'
+# TODO: https://github.com/PyCQA/flake8-bugbear
+# TODO: https://pypi.org/project/flake8-annotations/
+# TODO: https://pypi.org/project/flake8-pep585/
+# TODO: https://pypi.org/project/flake8-type-checking/
+# TODO: https://pypi.org/project/flake8-modern-annotations/
+# TODO: https://github.com/MichaelAquilina/flake8-spellcheck
+# TODO: https://github.com/xuhdev/flake8-executable
+# TODO: https://github.com/plinss/flake8-noqa
+# TODO: https://pypi.org/project/flake8-debugger/
+# TODO: https://github.com/globality-corp/flake8-logging-format
+# TODO: https://gitlab.com/RoPP/flake8-use-pathlib
+# TODO: https://github.com/adamchainz/flake8-comprehensions
+# TODO: https://github.com/pjknkda/flake8-datetimez
+# TODO: https://github.com/expobrain/flake8-datetime-utcnow-plugin
+# TODO: https://github.com/MartinThoma/flake8-scream
+# TODO: https://github.com/guilatrova/tryceratops
+# TODO: https://github.com/asottile/flake8-2020
+# TODO: https://github.com/python-formate/flake8-encodings
+# TODO: https://github.com/cooperlees/flake8-async
+# TODO: https://github.com/Takishima/flake8-secure-coding-standard
+# TODO: https://github.com/python-formate/flake8-slots
+# TODO: https://github.com/python-formate/flake8_strftime
+# TODO: https://github.com/decorator-factory/flake8-useless-assert
+
+# TODO: посмотреть что за она https://pypi.org/project/deal/
+
+
+# license check
+liccheck = '^0.9.2'
+
+# types
+# TODO: typeguard = '^2.13.3' или это https://docs.pydantic.dev/usage/validation_decorator/ или это https://github.com/EvgeniyBurdin/valdec
+
+mypy = '^1.11.0'
+# TODO: pytype = '^2022.10.26'
+# TODO: pyre-check = '^0.9.16'
+# TODO: pyright = '^1.1.277'
+types-cryptography = '^3.3.23.2'
+types-orjson = '^3.6.2'
+types-aiofiles = '^23.2.0.20240311'
+#types-pkg-resources = '^0.1.3'
+types-SQLAlchemy = '^1.4.53.38'
+types-pyaudio = '^0.2.16.20240516'
+types-tqdm = '^4.66.0.20240106'
+pydub-stubs = '^0.25.1.1'
+
+pip-audit = '^2.7.3'
+
+# TODO: vulture https://github.com/jendrikseipp/vulture
+# TODO: autopep8 https://github.com/hhatto/autopep8
+# TODO: https://zhauniarovich.com/post/2020/2020-04-starting-new-python-project/
+
+# import sort
+isort = '^5.13.2'
+
+# task system
+poethepoet = '^0.25.0'
+
+# code refactoring
+rope = '^1.12.0'
+
+# fastapi testclient
+httpx = '^0.27.0'
+
+# Weblate localization client
+wlc = '^1.14'
+
+# other
+pyupgrade = '^3.17.0'
+redbaron = '^0.9.2'
+
+# TODO: https://github.com/landscapeio/dodgy
+
+# TODO: https://pypi.org/project/ruff
+
+# TODO: https://github.com/QuantStack/memestra
+
+# TODO: https://github.com/replicatedhq/dockerfilelint
+# TODO: https://www.npmjs.com/package/dockerlinter
+# TODO: https://github.com/hadolint/hadolint
+
+# TODO: https://github.com/kucherenko/jscpd
+
+# TODO: https://github.com/tcort/markdown-link-check
+# TODO: https://github.com/igorshubovych/markdownlint-cli#readme
+
+# TODO: https://github.com/chris48s/v8r
+# TODO: https://github.com/adrienverge/yamllint
+# TODO: https://www.npmjs.com/package/eslint-plugin-json
+# TODO: https://www.npmjs.com/package/eslint-plugin-jsonc
+
+#####################################################################################################
+# License Checker
+#####################################################################################################
+
+[tool.liccheck]
+authorized_licenses = [
+    'BSD',
+    'new bsd',
+    'bsd license',
+    'new bsd license',
+    '3-Clause BSD',
+    'BSD-3-Clause',
+    'simplified bsd',
+    'apache',
+    'apache 2.0',
+    'Apache-2.0',
+    'apache software license',
+    'Apache Software',
+    'Apache License v2.0',
+    'isc license',
+    'isc license (iscl)',
+    'mit',
+    'mit license',
+    'python software foundation license',
+    'Python Software Foundation',
+    'Mozilla Public License 2.0 (MPL 2.0)',
+    'Historical Permission Notice and Disclaimer (HPND)',
+    'Public Domain',
+    'The Unlicense (Unlicense)',
+]
+unauthorized_licenses = [
+    'gpl v3',
+    'gnu lgpl',
+    'lgpl with exceptions or zpl',
+    'zpl 2.1',
+    'GNU Library or Lesser General Public License (LGPL)',
+    'Other/Proprietary',
+]
+level = 'Paranoid'
+dependencies = true
+optional_dependencies = []
+
+#####################################################################################################
+# isort
+#####################################################################################################
+
+[tool.isort]
+# https://pycqa.github.io/isort/docs/configuration/options.html
+py_version = 311
+line_length = 140
+combine_as_imports = true
+combine_star = true
+lexicographical = true
+src_paths = ['src', 'tests', 'examples']
+remove_redundant_aliases = true
+include_trailing_comma = true
+color_output = true
+multi_line_output = 3 # https://pycqa.github.io/isort/docs/configuration/multi_line_output_modes.html
+
+#####################################################################################################
+# flake8
+#####################################################################################################
+
+[tool.flake8]
+# Base flake8 configuration:
+# https://flake8.pycqa.org/en/latest/user/configuration.html
+# https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/index.html#external-plugins
+no-accept-encodings = true
+format = 'wemake'
+show-source = true
+statistics = false
+doctests = true
+max-complexity = 6
+inline-quotes = 'single'
+i-control-code = true
+max-line-length = 140
+min-coverage-percents = 100
+max-line-complexity = 25 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L692-L733
+max-cognitive-score = 60 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L1002-L1031
+max-cognitive-complexity = 50 # https://github.com/Melevir/flake8-cognitive-complexity#flake8-cognitive-complexity
+max-local-variables = 35 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L313-L360
+max-imports = 40 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L150-L186
+max-expressions = 25 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L415-L446
+max-try-body-length = 3 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L930-L958
+max-attributes = 20 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L962-L998
+max-arguments = 15 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L364-L386
+max-import-from-members = 15 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L1123-L1155
+max-raises = 5 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L1233-L1257
+max-module-members = 20 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L190-L216
+max-cognitive-average = 20 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L1035-L1060
+max-methods = 15 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L450-L482
+exps-for-one-empty-line = 1 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/best_practices.py#L2778-L2819
+max-name-length = 60 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/naming.py#L580-L617
+max-annotation-complexity = 4 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L1089-L1119
+max-awaits = 20 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L565-L587
+max-returns = 10 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L389-L411
+max-imported-names = 80 # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/complexity.py#L220-L264
+
+class_attributes_order = [
+    'constant',
+    'outer_field',
+    'field',
+    'meta_class',
+    'nested_class',
+    '__new__',
+    '__init__',
+    '__post_init__',
+    '__str__',
+    'magic_method',
+    'property_method',
+    'static_method',
+    'class_method',
+    'method',
+]
+
+# https://flakes.orsinium.dev/
+ignore = [
+    'C819',    # trailing comma prohibited  # https://github.com/PyCQA/flake8-commas/#errors
+    'C901',    # Function is too complex.  # https://www.flake8rules.com/rules/C901.html
+    'D100',    # Missing docstring in public module
+    'D101',    # Missing docstring in public class
+    'D102',    # Missing docstring in public method
+    'D103',    # Missing docstring in public function
+    'D104',    # Missing docstring in public package
+    'D105',    # Missing docstring in magic method
+    'D106',    # Missing docstring in public nested class
+    'D107',    # Missing docstring in __init__
+    'D203',    # One blank line required before class docstring
+    'DAR101',  # Missing parameter(s) in Docstring
+    'DAR201',  # Missing "Returns" in Docstring
+    'E266',    # Too many leading '#' for block comment.  # https://www.flake8rules.com/rules/E266.html
+    'E302',    # Expected 2 blank lines, found 0.  # https://www.flake8rules.com/rules/E302.html
+    'E305',    # Expected 2 blank lines after end of function or class.  # https://www.flake8rules.com/rules/E305.html
+    'E800',    # Found commented out code  # https://github.com/wemake-services/flake8-eradicate#error-codes
+    'H306',    # imports not in alphabetical order
+    'H903',    # Windows style line endings not allowed in code
+    'PIE792',  # no-inherit-object: Inheriting from object is unnecssary in python3.  # https://github.com/sbdchd/flake8-pie#pie792-no-inherit-object
+    'PIE803',  # prefer-logging-interpolation: Use lazy % formatting in logging functions.  # https://github.com/sbdchd/flake8-pie#pie803-prefer-logging-interpolation
+    'S105',    # Test for use of hard-coded password strings.  # https://bandit.readthedocs.io/en/latest/plugins/b105_hardcoded_password_string.html
+    'SIM102',  # Use a single if-statement instead of nested if-statements
+    'SIM117',  # Use '...' instead of multiple with statements. #  conflict with WPS316 Found context manager with too many assignments
+    'W503',    # Line break occurred before a binary operator  # https://www.flake8rules.com/rules/W503.html
+    'WPS115',  # Found upper-case constant in a class.  # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/naming.py#L489-L517
+    'WPS305',  # Forbid ``f`` strings.  # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/consistency.py#L326
+    'WPS306',  # Found class without a base class  # (conflict with pyupgrade)
+    'WPS338',  # Found incorrect order of methods in a class (replace with CCE001 from flake8-class-attributes-order)
+    'WPS412',  # Found `__init__.py` module with logic
+    'WPS430',  # Forbid nested functions.  # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/best_practices.py#L1263-L1299
+    'WPS451',  # Forbid positional only or ``/`` arguments.  # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/best_practices.py#L2036-L2072
+]
+
+per-file-ignores = [
+    # WPS202 - Found too many module members
+    # WPS226 - Found string literal over-use
+    # WPS237 - Found a too complex `f` string
+    # WPS317 - Found incorrect multi-line parameters
+    # WPS402 - Forbid too many ``# noqa`` comments.  # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/best_practices.py#L265-L290
+    # WPS421 - Found wrong function call
+    # WPS432 - Found magic number
+    # WPS450 - Found protected object import
+    # E501   - line too long
+    # ECE001 - Expression is too complex
+    'src/_*.py:WPS202,WPS226,WPS237,WPS317,WPS402,WPS421,WPS432,WPS450,E501,ECE001',
+    # WPS402 - Forbid too many ``# noqa`` comments.  # https://github.com/wemake-services/wemake-python-styleguide/blob/master/wemake_python_styleguide/violations/best_practices.py#L265-L290
+    'src/l7x/configs/settings.py:WPS402',
+    # WPS114 - Found underscored number name pattern
+    # WPS204 - Found overused expression
+    # WPS226 - Found string literal over-use
+    # WPS432 - Found magic number
+    'src/l7x/alembic/versions/db_*.py:WPS114,WPS204,WPS226,WPS432',
+    # WPS114 - Found underscored number name pattern
+    # WPS301 - Found dotted raw import
+    'src/l7x/alembic/migrations.py:WPS114,WPS301',
+    # F401 - imported but unused
+    # WPS113 - Found same alias import
+    '__init__.py:F401,WPS113',
+    # PIE798 - no-unnecessary-class: Consider using a module for namespacing instead
+    # S101 - Use of assert detected. The enclosed code will be removed when compiling to optimised byte code
+    # WPS204 - Found overused expression
+    # WPS226 - Found string literal over-use
+    # WPS420 - Found wrong keyword
+    # WPS421 - Found wrong function call
+    # WPS432 - Found magic number
+    # WPS436 - Found protected module import
+    # WPS437 - Found protected attribute usage
+    # WPS450 - Found protected object import
+    # WPS501 - Found `finally` in `try` block without `except`
+    # WPS609 - Found direct magic attribute usage
+    'tests/*.py:PIE798,S101,WPS204,WPS226,WPS420,WPS421,WPS432,WPS436,WPS437,WPS450,WPS501,WPS609',
+    # WPS202: Found too many module members
+    'scripts/create_patch.py:WPS202',
+    'scripts/patch.py:WPS202',
+]
+
+exclude = [
+    '.git',
+    '.vscode',
+    '.idea',
+    '.pytest_cache',
+    '.mypy_cache',
+    '.benchmarks',
+    'node_modules',
+    'archive',
+    'environment',
+    'patches',
+    'reports',
+    '__pycache__',
+    'build',
+    'dist',
+    '.venv',
+]
+
+
+[tool.darglint]
+# darglint configuration:
+# https://github.com/terrencepreilly/darglint
+strictness = 'long'
+
+[tool.flakeheaven]
+# optionally inherit from remote config (or local if you want)
+base = 'https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/flakeheaven.toml'
+
+#####################################################################################################
+# mypy
+#####################################################################################################
+
+[tool.mypy]
+# see https://mypy.readthedocs.io/en/stable/config_file.html
+mypy_path = '$MYPY_CONFIG_FILE_DIR/src'
+cache_dir = '.cache/.mypy'
+python_version = '3.11'
+platform = 'linux'
+namespace_packages = true
+explicit_package_bases = true
+plugins = [
+    'pydantic.mypy',
+    # 'numpy.typing.mypy_plugin',
+]
+exclude = '_[a-zA-Z0-9][a-zA-Z0-9_-]*\.py'
+
+#TODO: disallow_any_unimported = true
+#TODO: disallow_any_expr = true
+#TODO: disallow_any_decorated = true
+#TODO: disallow_any_explicit = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+
+disable_error_code = [
+    # 'type-abstract', # TODO: включить когда пофиксят этот баг https://github.com/python/mypy/issues/4717
+]
+
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+
+strict_equality = true
+strict_concatenate = true
+strict_optional = true
+
+#  TODO https://monkeytype.readthedocs.io/en/latest/index.html
+#  TODO https://github.com/JelleZijlstra/autotyping
+
+strict = true
+implicit_reexport = true
+
+show_error_codes = true
+show_error_context = true
+show_column_numbers = true
+pretty = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = [
+    'coloredlogs.*',
+    'cpuinfo.*',
+    'elasticapm.*',
+    'l7x.alembic.versions.*',
+    'ctranslate2.*',
+    'transformers.*',
+    'cyrtranslit.*',
+    'opencc.*',
+    'onnxruntime.*',
+    'huggingface_hub._snapshot_download.*',
+    'pysubs2.*',
+    'py3nvml.*',
+    'sentencepiece.*',
+    'nats.*',
+    'torch.*',
+    'environs.*',
+    'asyncpg.*',
+    'wlc.*',
+    'redbaron.*',
+]
+ignore_missing_imports = true
+
+[tool.pydantic-mypy]
+# https://pydantic-docs.helpmanual.io/mypy_plugin/#configuring-the-plugin
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true
+
+#####################################################################################################
+# tests
+#####################################################################################################
+
+[tool.pytest.ini_options]
+# https://docs.pytest.org/en/7.2.x/reference/customize.html
+# https://docs.pytest.org/en/7.2.x/reference/reference.html#ini-options-ref
+cache_dir = '.cache/.pytest'
+minversion = '7.2'
+xfail_strict = true
+asyncio_mode = 'auto'
+timeout = 600
+
+norecursedirs = ['.git', '.vscode', '.pytest_cache', '.mypy_cache', 'tmp*', 'node_modules', 'patches', 'reports', 'scripts', 'models', '.benchmarks']
+python_files = ['test_*.py', 'bdd_*.py']
+python_functions = ['test_*']
+pythonpath = ['.', 'src']
+testpaths = ['tests']
+python_classes = 'Test*'
+
+log_cli = false
+log_auto_indent = true
+log_cli_level = 'INFO'
+log_cli_date_format = '%Y-%m-%d %H:%M:%S'
+log_cli_format = '%(asctime)s %(levelname)s %(message)s'
+
+filterwarnings = [
+    'error',
+    # DeprecationWarning
+    'ignore::DeprecationWarning',
+    # pytest's own futurewarnings
+    'ignore::pytest.PytestExperimentalApiWarning',
+]
+
+markers = [
+    'dependency',
+    'xfail',
+    'order',
+    'parametrize',
+    'freeze_time',
+    'usefixtures',
+    'benchmark',
+    'skipif',
+    'should_fail',
+    'skip',
+    'vcr',
+    'default_cassette',
+    'block_network',
+    'enable_socket',
+    'asyncio',
+    'timeout',
+]
+
+# https://docs.pytest.org/en/7.2.x/reference/reference.html#command-line-flags
+addopts = '-ra --strict-markers --disable-socket --allow-unix-socket --allow-hosts="127.0.0.1"'
+
+#####################################################################################################
+# poe
+#####################################################################################################
+
+[tool.poe.tasks]
+update = { shell = 'rm -f $(pwd)/poetry.lock && poetry lock --no-update && poetry update && poetry install --sync --no-root && poetry run python $(pwd)/scripts/patch.py' }
+
+clean = { shell = './scripts/clean.sh' }
+
+update-security-packages-list = { shell = './scripts/update_packages_need_update_in_dockers.sh' }
+view-packages-versions = { shell = './scripts/view_packages_versions.sh' }
+
+profile = { args = [{ name = 'name', default = 'default', positional = true }], shell = 'mkdir -p $(pwd)/reports/profiles && python -m cProfile -o $(pwd)/reports/profiles/$name.pyprof $(pwd)/src/_debug_run.py' }
+profile-view = { args = [{ name = 'name', default = 'default', positional = true }], shell = 'pyprof2calltree -i $(pwd)/reports/profiles/$name.pyprof -k' }
+
+git-find-diff-marker = { shell = '$(pwd)/scripts/git/diff-marker.sh' }
+git-fsck = { shell = '$(pwd)/scripts/git/fsck.sh' }
+git-clear-force = { shell = '$(pwd)/scripts/git/gc-force.sh' }
+git-clear = { shell = '$(pwd)/scripts/git/gc.sh' }
+
+cspell = { shell = '$(pwd)/scripts/lint/cspell.sh' }
+
+dockerfilelint = { shell = '$(pwd)/scripts/lint/dockerfilelint.sh' }
+dockerlinter = { shell = '$(pwd)/scripts/lint/dockerlinter.sh' }
+docker = ['dockerfilelint', 'dockerlinter']
+
+shell-check = { shell = '$(pwd)/scripts/lint/sh.sh' }
+
+dotenv-linter = { shell = '$(pwd)/scripts/lint/dotenv.sh' }
+
+editorconfig-linter = { shell = '$(pwd)/scripts/lint/editorconfig.sh' }
+
+isort = 'isort --jobs -1 .'
+yesqa = { shell = 'find "$(pwd)/src" "$(pwd)/tests" -type f -name "*.py" -print0 | xargs -0 -P $(nproc --all) -I % bash -c "echo \"yesqa %\"; poetry run yesqa \"%\" || true"' } # TODO: сделать патч на yesqa чтобы не возвращала 1 при изменении файла
+pyupgrade = { shell = 'find "$(pwd)/src" "$(pwd)/tests" -type f -name "*.py" -print0 | xargs -0 -P $(nproc --all) -I % bash -c "poetry run pyupgrade --exit-zero-even-if-changed --py311-plus \"%\""' }
+pretty = ['yesqa', 'pyupgrade', 'isort']
+
+license = 'liccheck'
+
+audit = 'pip-audit --strict .'
+
+poetry-check = { shell = 'poetry check --lock' }
+
+flake8 = 'flake8'
+pylint = { shell = 'PYLINTHOME="$(pwd)/.cache/.pylint" poetry run pylint "$(pwd)/src/"' }
+mypy = 'mypy src'
+lint = ['cspell', 'flake8', 'pylint', 'mypy']
+
+test-general = 'python ./tests/run_pytests.py --showlocals -vv --diff-width=140 --cov=src --cov-report html --cov-report term --html-report=./reports/test-report.html -o faulthandler_timeout=10'
+test-fixtures = 'python ./tests/run_pytests.py --dead-fixtures --dup-fixtures -o "python_files=test_*.py"'
+test-change = 'python ./tests/run_pytests.py  --showlocals --maxfail=1 --testmon'
+test = ['test-general', 'test-fixtures']
+
+# test - TODO: сделать чтобы 'test' баз-данных запускался в докере
+# license - TODO: fix pkg_resources.UnknownExtra: python-socketio 5.11.2 has no such extra feature 'asyncio-client'
+all-check-in-docker = ['git-find-diff-marker', 'shell-check', 'editorconfig-linter', 'poetry-check', 'audit', 'lint']
+
+all_check = ['dotenv-linter', 'all-check-in-docker', 'test']
+
+all = ['clean', 'pretty', 'all_check']
+
+#####################################################################################################

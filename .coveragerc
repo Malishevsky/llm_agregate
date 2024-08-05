@@ -1,0 +1,54 @@
+# https://coverage.readthedocs.io/en/latest/config.html
+[paths]
+source = src
+
+[run]
+omit =
+    *site-packages*
+    *tests*
+    src/_*.py
+
+source = src
+branch = True
+
+data_file = .cache/.coverage
+
+[report]
+precision = 2
+show_missing = True
+skip_covered = True
+skip_empty = False
+include_namespace_packages = True
+
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Have to re-enable the standard pragma
+    \# pragma: no cover\b
+
+    # Don't complain about missing debug-only code:
+    def __repr__
+    if self\.debug
+
+    # Don't complain if tests don't hit defensive assertion code:
+    ^\s*raise AssertionError\b
+    ^\s*raise NotImplementedError\b
+    ^\s*return NotImplemented\b
+    ^\s*raise$
+
+    # Don't complain if non-runnable code isn't run:
+    if 0:
+    if __name__ == .__main__.:
+
+    # Don't complain about abstract methods, they aren't run:
+    @(abc\.)?abstractmethod
+
+    # typing-related code
+    ^if (False|TYPE_CHECKING):
+    : \.\.\.(\s*#.*)?$
+    ^ +\.\.\.$
+    -> ['\"]?NoReturn['\"]?:
+
+ignore_errors = True
+
+[html]
+directory = reports/coverage

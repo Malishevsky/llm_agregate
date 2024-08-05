@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+LEVEL_DIR='..'
+# shellcheck source=.base.sh
+source "$(dirname "${0}")/${LEVEL_DIR}/.base.sh"
+
+###############################################################################
+
+printf '\n'
+echo 'Cleanup git root'
+git gc --aggressive
+
+if [[ -f "${ROOT_DIR}/.gitmodules" ]]; then
+    sed -r 's/^[\t\n\v ]*path[\t\n\v ]*=[\t\n\v ]*([^\t\n\v ]+)[\t\n\v ]*$/\1/g;t;d' "${ROOT_DIR}/.gitmodules" | \
+    xargs --no-run-if-empty -I % sh -c \
+    "printf '\n'; echo 'Cleanup git % submodule'; cd '${ROOT_DIR}/%'; git reflog expire --verbose --all --updateref --rewrite --stale-fix; git gc --prune=2w --keep-largest-pack;"  # cspell:disable-line
+fi
+
+###############################################################################

@@ -1,0 +1,19 @@
+diff -ruN wlc_orig/__init__.py wlc/__init__.py
+--- wlc_orig/__init__.py	2024-03-01 11:53:06.139181768 +0300
++++ wlc/__init__.py	2024-02-29 22:37:08.443069235 +0300
+@@ -212,6 +212,10 @@
+         """Perform GET request on the API."""
+         return self.request("get", path, params=params)
+ 
++    def patch(self, path, **kwargs):
++        """Perform PATCH request on the API."""
++        return self.request("patch", path, data=kwargs)
++
+     def list_factory(self, path, parser, params=None):
+         """Listing object wrapper."""
+         while path is not None:
+diff -ruN wlc_orig/___PATCHED___.txt wlc/___PATCHED___.txt
+--- wlc_orig/___PATCHED___.txt	1970-01-01 03:00:00.000000000 +0300
++++ wlc/___PATCHED___.txt	2024-03-01 11:53:06.567186653 +0300
+@@ -0,0 +1 @@
++patched

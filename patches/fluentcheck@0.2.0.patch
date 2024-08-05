@@ -1,0 +1,21 @@
+diff -ruN fluentcheck_orig/___PATCHED___.txt fluentcheck/___PATCHED___.txt
+--- fluentcheck_orig/___PATCHED___.txt	1970-01-01 03:00:00.000000000 +0300
++++ fluentcheck/___PATCHED___.txt	2023-08-08 22:10:28.275423626 +0300
+@@ -0,0 +1 @@
++patched
+diff -ruN fluentcheck_orig/assertions_check/strings.py fluentcheck/assertions_check/strings.py
+--- fluentcheck_orig/assertions_check/strings.py	2023-08-08 22:10:28.182091092 +0300
++++ fluentcheck/assertions_check/strings.py	2023-08-08 21:51:47.555164700 +0300
+@@ -292,10 +292,10 @@
+         raise CheckError('{} is valid XML'.format(check_obj._val))
+ 
+ 
+-def matches(check_obj, regex):
++def matches(check_obj, regex, flags=0):
+     check_obj.is_string()
+     try:
+-        pattern = re.compile(regex)
++        pattern = re.compile(regex, flags)
+         assert pattern.match(check_obj._val) is not None
+         return check_obj
+     except AssertionError:

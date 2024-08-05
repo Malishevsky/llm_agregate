@@ -1,0 +1,21 @@
+{
+    "$schema": "https://json.schemastore.org/package",
+    "name": "server-debug",
+    "license": "UNLICENSED",
+    "private": true,
+    "devDependencies": {
+        "cspell": "^8.12.1",
+        "dockerfilelint": "^1.8.0",
+        "dockerlinter": "^1.2.2",
+        "editorconfig-checker": "^5.1.8",
+        "jscpd": "^4.0.5",
+        "localtunnel": "^2.0.2",
+        "markdown-link-check": "^3.12.2",
+        "v8r": "^3.1.0"
+    },
+    "engines": {
+        "npm": "please-use-yarn",
+        "node": ">=20.15.1",
+        "yarn": ">=1.22.19"
+    }
+}

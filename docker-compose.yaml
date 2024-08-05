@@ -1,0 +1,86 @@
+services:
+
+    ######################################################################################
+
+    postgres_test:
+        build:
+            context: environment/postgres/
+            args:
+                - USER_ID=0
+                - GROUP_ID=0
+                - USER_NAME=default_user
+        container_name: postgres_test
+        networks:
+            - private-network
+        environment:
+            POSTGRES_PASSWORD: ${L7X_DB_ADMIN_PASS}
+            POSTGRES_USER: ${L7X_DB_ADMIN_USER}
+            POSTGRES_DB: ${L7X_DB_NAME}
+            POSTGRES_INITDB_ARGS: -E 'UTF-8' --lc-collate='en_US.UTF-8' --lc-ctype='en_US.UTF-8'
+        ports:
+            - ${L7X_DB_PORT}:5432
+        restart: unless-stopped
+        volumes:
+            - ./docker_volumes/postgres:/var/lib/postgresql/data
+        env_file:
+            - .env
+
+    ######################################################################################
+
+#    pgadmin_test:
+#        build:
+#            context: environment/pgadmin/
+#            args:
+#                - USER_ID=0
+#                - GROUP_ID=0
+#                - USER_NAME=default_user
+#        container_name: pgadmin_test
+#        environment:
+#            PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+#            PGADMIN_DEFAULT_PASSWORD: pgadmin
+#            PGADMIN_DISABLE_POSTFIX: true
+#            WAIT_HOSTS: postgres_test:5432
+#        ports:
+#            - 18889:80
+#        networks:
+#            - private-network
+#        restart: unless-stopped
+#        volumes:
+#            - ./docker_volumes/pgadmin:/var/lib/pgadmin
+#        depends_on:
+#            - postgres_test
+#        extra_hosts:
+#            - "host.docker.internal:host-gateway"
+#        env_file:
+#            - .env
+
+    #####################################################################################
+
+    new-demo-page:
+        image: "git.nordicwise.com:4999/prototypes/demo-page-for-vtb-bank:1.2.0@sha256:6672b6259cce17d71616ec4483f02886fea5ceaf329617053d8758bbce2f4d01"
+#        build:
+#            context: .
+        restart: unless-stopped
+        depends_on:
+            - postgres_test
+        networks:
+            - private-network
+        ports:
+            - ${L7X_SERVER_PORT}:8080
+        volumes:
+            - ./docker_volumes/app:/usr/src/app/mnt
+        env_file:
+            - .env
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        -   capabilities: [ "gpu" ]
+                            count: 1
+                            driver: nvidia
+
+    ######################################################################################
+
+networks:
+    private-network:
+        driver: bridge

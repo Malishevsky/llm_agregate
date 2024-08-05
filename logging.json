@@ -1,0 +1,8 @@
+{
+    "default": "INFO",
+    "specific": {
+        "l7x": "INFO",
+        "environ.environ": "WARNING",
+        "urllib3.connectionpool": "WARNING"
+    }
+}

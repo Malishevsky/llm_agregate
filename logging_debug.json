@@ -1,0 +1,7 @@
+{
+    "default": "DEBUG",
+    "specific": {
+        "l7x": "DEBUG",
+        "asyncio": "INFO"
+    }
+}
