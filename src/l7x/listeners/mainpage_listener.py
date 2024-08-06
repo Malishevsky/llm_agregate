@@ -63,15 +63,16 @@ class LlmProcessCommand(BaseCommand):
         if self.convert_to is not None:
             new_prompts.extend(prompts.get(self.convert_to, []))
 
+        print(f'{new_prompts=}')
         for sum_prompt in new_prompts:
             messages = [
                 {"role": "system", "content": sum_prompt},
                 {"role": "user", "content": text}
             ]
-
+            print(f'{messages}')
             outputs = llm_pipeline(
                 messages,
-                max_new_tokens=256,
+                max_new_tokens=2048,
                 do_sample=False,
                 pad_token_id=tokenizer.eos_token_id
             )
