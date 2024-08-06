@@ -32,3 +32,7 @@ textarea{
 .q-field--dark .q-field__control:before {
     border: none;
 }
+
+.download-btn {
+    color: rgba(102, 245, 6, 0.87);
+}

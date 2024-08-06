@@ -1,9 +1,12 @@
 ####################################################################################################
 import asyncio
+import base64
 from asyncio import sleep, get_running_loop
 from functools import partial
+from io import BytesIO
 from typing import Final
 
+from docx import Document
 from nicegui import ui, App
 from nicegui.elements.button import Button
 from nicegui.elements.textarea import Textarea
@@ -61,25 +64,22 @@ class LlmProcessCommand(BaseCommand):
         new_prompts = summary_prompts
 
         if self.convert_to is not None:
-            new_prompts.extend(prompts.get(self.convert_to, []))
+            new_prompts.append(prompts.get(self.convert_to, []))
 
-        print(f'{new_prompts=}')
         for sum_prompt in new_prompts:
             messages = [
                 {"role": "system", "content": sum_prompt},
                 {"role": "user", "content": text}
             ]
-            print(f'{messages}')
+
             outputs = llm_pipeline(
                 messages,
-                max_new_tokens=2048,
+                max_new_tokens=10000,
                 do_sample=False,
                 pad_token_id=tokenizer.eos_token_id
             )
             out_text = outputs[0]["generated_text"][-1]['content']
-            print(out_text)
-            print('___________________________________________________________________')
-            print()
+
             text = out_text.strip()
         return text
 
@@ -131,6 +131,40 @@ async def _summarize(
         return
     finally:
         summ_btn.set_enabled(True)
+
+async def _download_file(text):
+    doc = Document()
+    doc.add_paragraph(text)
+    io_buffer = BytesIO()
+    doc.save(io_buffer)
+    io_buffer.seek(0)
+    base64_string = base64.b64encode(io_buffer.read()).decode('utf-8')
+    await ui.run_javascript(f'''
+        return await (async () => {{
+            try {{
+                const saveBase64File = async (base64String, fileName) => {{
+                    const byteCharacters = atob(base64String);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {{
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }}
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], {{ type: 'application/octet-stream' }});
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = fileName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(link.href);
+                }};
+                await saveBase64File({base64_string}, 'filename.docx');
+                return {{ success: true }};
+            }} catch (error) {{
+                throw new Error(error);
+            }}
+        }})();
+    ''', timeout=30)
 
 #####################################################################################################
 
@@ -189,6 +223,14 @@ async def _show_mainpage(request: Request) -> None:
                     radio_value=transform_radio.value,
                 )
             )
+            ui.button(
+                'Download file',
+                on_click=lambda _: _download_file(text=summ_area.value)
+            ).bind_visibility_from(
+                summ_area,
+                target_name='value',
+                backward=lambda x: x != '',
+            ).classes('download-btn')
             spin = ui.spinner(
                 type='ios',
                 size='3em',
