@@ -72,8 +72,9 @@ async def _web_work(elp_params: EventLoopFuncParams[_ExtParams], /) -> None:
 
     _nicegui_run_with(
         app,
-        title='Банк ВТБ',
-        language='ru',
+        dark=app_settings.dark_mode,
+        title='Summarization POS',
+        language='en-US',
         favicon='/static/images/favicon.ico',
         reconnect_timeout=10,
         storage_secret=app_settings.storage_secret,

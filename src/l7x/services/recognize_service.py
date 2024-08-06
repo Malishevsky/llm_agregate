@@ -42,13 +42,14 @@ class PrivateRecognizeService(RecognizeService):
 
     def __init__(self, app_settings: AppSettings, aiohttp_client: ClientSession, logger: Logger) -> None:
         super().__init__(aiohttp_client, logger)
-        self._url: Final = urljoin(app_settings.translate_api_url, 'api/speech-to-text')
+        self._url: Final = urljoin(app_settings.recognizer_api_url, '/speech-to-text')
 
     #####################################################################################################
 
-    async def recognize(self, *, file_name: str, wav: bytes, language: str, mime_type: str = 'audio/wav') -> str:
+    async def recognize(self, *, file_name: str, wav: bytes, language: str | None, mime_type: str = 'audio/wav') -> str:
         data = FormData()
-        data.add_field('lang', language)
+        if language is not None:
+            data.add_field('lang', language)
         data.add_field('output_native', 'false')
         data.add_field('file', wav, filename=file_name, content_type=mime_type)
         data.add_field('denoise', 'false')
@@ -62,7 +63,7 @@ class PrivateRecognizeService(RecognizeService):
             recognize_json = await recognize_resp.json(loads=orjson_loads)
             recognized_text = recognize_json.get('result', '')
         else:
-            self._logger.warning(f'Return invalid status for api/speech-to-text [{recognize_resp.status}]')
+            self._logger.warning(f'Return invalid status for /speech-to-text [{recognize_resp.status}]')
             recognized_text = ''
 
         return recognized_text

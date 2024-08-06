@@ -36,8 +36,8 @@ class App(AppFastAPI):
         self._aiohttp_client: Final = create_aiohttp_client()
 
         _nicegui_app.logger = self.logger
-        _nicegui_app.languages_service = PrivateLangsService(app_settings, self._aiohttp_client, logger)
-        _nicegui_app.translation_service = PrivateTranslationService(app_settings, self._aiohttp_client, logger)
+        # _nicegui_app.languages_service = PrivateLangsService(app_settings, self._aiohttp_client, logger)
+        # _nicegui_app.translation_service = PrivateTranslationService(app_settings, self._aiohttp_client, logger)
         _nicegui_app.recognize_service = PrivateRecognizeService(app_settings, self._aiohttp_client, logger)
         _nicegui_app.rec_languages_service = PrivateRecognizerLangsService(app_settings, self._aiohttp_client, logger)
         _nicegui_app.add_static_files(url_path='/static', local_directory='./static')

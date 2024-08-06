@@ -9,6 +9,7 @@ from typing import Any, Final, Protocol, TypeVar
 from urllib.parse import urlparse
 
 from environs import Env
+from orjson import loads as orjson_loads
 from pydantic.dataclasses import dataclass
 
 from l7x.utils.config_utils import get_app_build_info
@@ -67,9 +68,22 @@ class AppSettings:  # pylint: disable=too-many-instance-attributes
     translate_api_url: str
     translate_api_langs_cache_expire_sec: int
 
+    recognizer_api_url: str
+    recognizer_api_langs_cache_expire_sec: int
+
     max_upload_file_size_in_byte: int
 
     storage_secret: str
+
+    certificate_path: Path | None
+    private_key_path: Path | None
+
+    dark_mode: bool
+
+    prompts_per_language: dict[str, str | list[str]]
+
+    llm_model_id: str
+    models_cache_dir: Path | None
 
     #####################################################################################################
 
@@ -135,13 +149,14 @@ def _create_app_settings() -> _AppSettingsProtocol:
     dev_translate_api_url = None
 
     def _app_settings(include_db_admin_credentials: bool = False) -> AppSettings:
+        env: Final = load_env()
+
         translate_api_url = urlparse(getenv('L7X_TRANSLATE_API_URL', '')).geturl()
+        recognizer_api_url = urlparse(getenv('L7X_RECOGNIZER_API_URL', '')).geturl()
 
         nonlocal dev_translate_api_url  # noqa: WPS420
         if dev_translate_api_url is None:
             dev_translate_api_url = translate_api_url  # noqa: WPS442
-
-        env: Final = load_env()
 
         run_translation_server: Final = env.bool('L7X_RUN_TRANSLATION_SERVER', False)  # noqa: WPS425
         is_dev_mode: Final = flags.dev_mode is True
@@ -151,7 +166,14 @@ def _create_app_settings() -> _AppSettingsProtocol:
         else:
             translate_api_url = urlparse(env.str('L7X_TRANSLATE_API_URL', '')).geturl()
 
+        prompts_per_language: Final = orjson_loads(env.str('L7X_DEFAULT_PARAMS_PER_LANGUAGE', '{}'))
+
         app_build_info: Final = get_app_build_info()
+
+        hf_token = env.str('L7X_HF_TOKEN')
+        if hf_token is not None:
+            from huggingface_hub import login
+            login(hf_token)
 
         return AppSettings(
             service_name=env.str('L7X_SERVICE_NAME', app_build_info.app_name).strip(),
@@ -181,9 +203,21 @@ def _create_app_settings() -> _AppSettingsProtocol:
             translate_api_url=translate_api_url,
             translate_api_langs_cache_expire_sec=env.int('L7X_TRANSLATE_API_LANGS_CACHE_EXPIRE_SEC', 60 * 60),
 
+            recognizer_api_url=recognizer_api_url,
+            recognizer_api_langs_cache_expire_sec=env.int('L7X_RECOGNIZER_API_LANGS_CACHE_EXPIRE_SEC', 60 * 60),
+
             max_upload_file_size_in_byte=env.int('L7X_MAX_UPLOAD_FILE_SIZE_IN_BYTE', 50 * 1024 * 1024),  # noqa: WPS432
 
             storage_secret=env.str('L7X_STORAGE_SECRET', ''),
+
+            certificate_path=_resolve_path(env.str('L7X_SSL_CERTIFICATE_PATH', '')),
+            private_key_path=_resolve_path(env.str('L7X_SSL_PRIVATE_KEY_PATH', '')),
+            dark_mode=env.bool('L7X_DARK_MODE', False),
+
+            prompts_per_language=prompts_per_language,
+
+            llm_model_id=env.str('L7X_LLM_MODEL_ID', ''),
+            models_cache_dir=_resolve_path(env.str('L7X_MODELS_CACHE_DIR', '')),
         )
 
     return _app_settings

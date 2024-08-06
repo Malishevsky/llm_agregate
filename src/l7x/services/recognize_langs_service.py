@@ -30,7 +30,7 @@ class RecognizerLangsService(BaseService, ABC):
     #####################################################################################################
 
     def __init__(self, app_settings: AppSettings, aiohttp_client: ClientSession, logger: Logger) -> None:
-        self._translate_api_langs_cache_expire_sec: Final = app_settings.translate_api_langs_cache_expire_sec
+        self._translate_api_langs_cache_expire_sec: Final = app_settings.recognizer_api_langs_cache_expire_sec
         self._aiohttp_client: Final = aiohttp_client
         self._logger: Final = logger
         self._langs_options: Mapping[str, LanguageDetail] = EMPTY_LANGS
@@ -72,7 +72,7 @@ class PrivateRecognizerLangsService(RecognizerLangsService):
 
     def __init__(self, app_settings: AppSettings, aiohttp_client: ClientSession, logger: Logger) -> None:
         super().__init__(app_settings, aiohttp_client, logger)
-        self._url: Final = urljoin(app_settings.translate_api_url, 'api/get-speech-to-text-languages')
+        self._url: Final = urljoin(app_settings.recognizer_api_url , '/get-speech-to-text-languages')
 
     #####################################################################################################
 

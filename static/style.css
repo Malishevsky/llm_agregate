@@ -1,0 +1,34 @@
+.main-container {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.main-container > * {
+    width: 90%;
+}
+
+.main-block {
+    padding: 10px;
+}
+
+.main-block > * {
+    width: 100%;
+}
+
+.shadow-border {
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(74, 76, 77, 0.5);
+}
+
+textarea{
+    resize: none !important;
+    border: none;
+    white-space: normal;
+    overflow-y: auto;
+}
+
+.q-field--dark .q-field__control:before {
+    border: none;
+}
