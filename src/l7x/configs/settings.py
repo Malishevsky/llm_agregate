@@ -80,7 +80,7 @@ class AppSettings:  # pylint: disable=too-many-instance-attributes
 
     dark_mode: bool
 
-    prompts_per_language: dict[str, str | list[str]]
+    prompts_per_language: dict[str, Any]
 
     llm_model_id: str
     models_cache_dir: Path | None
@@ -166,7 +166,7 @@ def _create_app_settings() -> _AppSettingsProtocol:
         else:
             translate_api_url = urlparse(env.str('L7X_TRANSLATE_API_URL', '')).geturl()
 
-        prompts_per_language: Final = orjson_loads(env.str('L7X_DEFAULT_PARAMS_PER_LANGUAGE', '{}'))
+        prompts_per_language: Final = orjson_loads(env.str('L7X_PROMPTS_PER_LANGUAGE', '{}'))
 
         app_build_info: Final = get_app_build_info()
 

@@ -43,7 +43,7 @@ class LlmProcessCommand(BaseCommand):
         model: Final[PreTrainedModel] = global_context.model
         tokenizer: Final[PreTrainedTokenizer] = global_context.tokenizer
         prompts_per_language: Final = global_context.app_settings.prompts_per_language
-        prompts: Final = prompts_per_language[self.language]
+        prompts: Final = prompts_per_language.get(self.language)
         if prompts is None:
             return
 
@@ -59,10 +59,11 @@ class LlmProcessCommand(BaseCommand):
         )
         summary_prompts = prompts.get('summary', [])
         new_prompts = summary_prompts
+
         if self.convert_to is not None:
             new_prompts.extend(prompts.get(self.convert_to, []))
 
-        for sum_prompt in prompts.get('summary', []):
+        for sum_prompt in new_prompts:
             messages = [
                 {"role": "system", "content": sum_prompt},
                 {"role": "user", "content": text}
@@ -119,7 +120,7 @@ async def _summarize(
         loop = get_running_loop()
         send_and_wait_result = partial(
             app.cmd_manager.send_and_wait_result,
-            call_timeout_sec=app.settings.compute_metrics_timeout_sec,
+            call_timeout_sec=120,
         )
         summary_text = await loop.run_in_executor(None, send_and_wait_result, llm_cmd)
         summarized_area.set_value(summary_text)
