@@ -232,7 +232,7 @@ async def _show_mainpage(request: Request) -> None:
             summ_area = ui.textarea(
                 label='Summary text',
             ).props('outlined readonly').classes('shadow-border')
-            with ui.row():
+            with ui.row().classes('btn-container'):
                 sum_btn = ui.button(
                     'Summarize',
                     icon='summarize',
@@ -245,22 +245,22 @@ async def _show_mainpage(request: Request) -> None:
                         summarized_area=summ_area,
                         radio_value=transform_radio.value,
                     )
-                ).classes('w-full')
+                )
                 ui.button('Clear', icon='delete', on_click=lambda _: _clear_handler(
                     rec_area=rec_area,
                     summ_area=summ_area,
                     download_btn=download_btn,
-                )).classes('w-full')
+                )).classes('download-btn')
 
-            download_btn = ui.button(
-                'Download file',
-                icon='download',
-                on_click=lambda _: _download_file(text=summ_area.value)
-            ).bind_visibility_from(
-                summ_area,
-                target_name='value',
-                backward=lambda x: x != '',
-            ).classes('download-btn')
+                download_btn = ui.button(
+                    'Download file',
+                    icon='download',
+                    on_click=lambda _: _download_file(text=summ_area.value)
+                ).bind_visibility_from(
+                    summ_area,
+                    target_name='value',
+                    backward=lambda x: x != '',
+                ).classes('download-btn')
 
             spin = ui.spinner(
                 type='ios',

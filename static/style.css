@@ -37,6 +37,14 @@ textarea{
     border-style: none;
 }
 
+.btn-container > * {
+    flex: 1
+}
+
 .download-btn {
     background: rgba(95, 222, 21, 0.87) !important;
+}
+
+.clear-btn {
+    background: rgba(248, 13, 13, 0.87) !important;
 }
