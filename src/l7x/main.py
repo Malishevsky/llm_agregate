@@ -253,8 +253,8 @@ def run(
     /,
 ) -> None:
     logger.info('Running...')
-    setproctitle('demo_page_server')
-    setthreadtitle('m_demo_page_server')
+    setproctitle('llm_summarize_server')
+    setthreadtitle('m_llm_summarize_server')
     freeze_support()
     ctx: Final = _multiprocessing_get_context('spawn')
     with ctx.Manager() as manager:

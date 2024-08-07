@@ -101,7 +101,7 @@ async def _summarize(
     radio_value: str,
 ):
     if audio_data is None:
-        ui.notify('Error file downloading')
+        ui.notify('File not found', position='top', type='negative')
         return
 
     recognizer_service: PrivateRecognizeService = app.recognize_service
@@ -118,7 +118,7 @@ async def _summarize(
             timeout=180,
         )
         recognizer_area.set_value(recognized_text)
-        await sleep(0.2)
+        await sleep(0.5)
 
         llm_cmd: Final = LlmProcessCommand(
             text=recognized_text,
@@ -227,7 +227,6 @@ async def _show_mainpage(request: Request) -> None:
         with ui.column().classes('main-block shadow-border'):
             ui.label('Select text style postprocessing')
             transform_radio = ui.radio(['FORMAL', 'INFORMAL', 'OFF'], value='OFF').props('inline')
-
             rec_area = ui.textarea(
                 label='Recognized text',
             ).props('outlined readonly').classes('shadow-border')
