@@ -22,6 +22,8 @@ sudo apt -q install -y python3.11 python3.11-dev python3.11-venv nodejs docker-c
 sudo curl -L "https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-$(uname -s)-$(uname -m)" -o '/usr/local/bin/docker-compose'
 sudo chmod +x '/usr/local/bin/docker-compose'
 
+
+#ДОКЕР ФАЙЛЫ ТУТ ТОЛЬКО ДЛЯ ПРИМЕРА !!!!!!!!!!!!!!!!!!!!!!!!!!
 sudo docker compose version
 docker compose version
 
@@ -45,22 +47,6 @@ yarn --version
 
 Copy `.env.example` to `.env`
 
-## DataBase
-
-Run db:
-```bash
-./src/_environment.py
-```
-
-Web manage db: open http://localhost:18888/ and add your db to `pqAdmin`.
-
-
-Alembic manage db:
-
-```bash
-./src/_db.py -h
-```
-
 ## Development
 
 Для режима разработки рекомендуется добавить следующие переменные в окружение перед запуском приложения:
@@ -80,30 +66,6 @@ Alembic manage db:
 Create certificate and public key:
 ```bash
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/private.key -out /etc/ssl/certs/certificate.crt
-```
-
-Clear all stopped local containers, images and volumes:
-```bash
-sudo docker system prune --force --all --volumes
-```
-
-Build docker image:
-```bash
-tag=demo-page-for-vtb-bank && sudo DOCKER_BUILDKIT=1 docker build --pull --progress=plain -t ${tag} . 
-```
-
-Run test container:
-```bash
-sudo docker compose up --build
-```
-
-Update, build and push docker image single line:
-```bash
-bash -c 'version=dev && repo_tag=git.nordicwise.com:4999/prototypes/demo-page-for-vtb-bank:${version} && sudo DOCKER_BUILDKIT=1 docker build --pull --progress=plain -t ${repo_tag} . && sudo docker push ${repo_tag}'
-```
-
-```bash
-bash -c 'version=prod && repo_tag=git.nordicwise.com:4999/business/frontend-for-bank-external:${version} && sudo DOCKER_BUILDKIT=1 docker build --pull --progress=plain -t ${repo_tag} . && sudo docker push ${repo_tag}'
 ```
 
 ## Testing

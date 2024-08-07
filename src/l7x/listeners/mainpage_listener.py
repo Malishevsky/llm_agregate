@@ -22,12 +22,15 @@ from l7x.services.recognize_service import PrivateRecognizeService
 from l7x.utils.cmd_manager_utils import BaseCommand, _CmdGlobalContext, _CmdLocalContext, _CmdReturnValue
 from l7x.utils.fastapi_utils import AppFastAPI
 
+#####################################################################################################
 
 @dataclass(kw_only=True)
 class AudioData:
     name: str
     type: str
     file: bytes
+
+#####################################################################################################
 
 @dataclass(kw_only=True, frozen=True)
 class LlmProcessCommand(BaseCommand):
@@ -76,12 +79,15 @@ class LlmProcessCommand(BaseCommand):
                 messages,
                 max_new_tokens=10000,
                 do_sample=False,
-                pad_token_id=tokenizer.eos_token_id
+                temperature=0,
+                pad_token_id=tokenizer.eos_token_id,
             )
             out_text = outputs[0]["generated_text"][-1]['content']
 
             text = out_text.strip()
         return text
+
+#####################################################################################################
 
 async def _summarize(
     summ_btn: Button,
@@ -132,6 +138,8 @@ async def _summarize(
     finally:
         summ_btn.set_enabled(True)
 
+#####################################################################################################
+
 async def _download_file(text):
     doc = Document()
     doc.add_paragraph(text)
@@ -158,13 +166,21 @@ async def _download_file(text):
                     document.body.removeChild(link);
                     window.URL.revokeObjectURL(link.href);
                 }};
-                await saveBase64File({base64_string}, 'filename.docx');
+                await saveBase64File("{base64_string}", 'filename.docx');
                 return {{ success: true }};
             }} catch (error) {{
                 throw new Error(error);
             }}
         }})();
     ''', timeout=30)
+
+#####################################################################################################
+
+async def _area_handler(event, second_area, download_btn):
+    event_text = event.value
+    if event_text == '':
+        second_area.value = ''
+        download_btn.set_visibility(False)
 
 #####################################################################################################
 
@@ -209,8 +225,16 @@ async def _show_mainpage(request: Request) -> None:
         with ui.column().classes('main-block shadow-border'):
             ui.label('Select text style postprocessing')
             transform_radio = ui.radio(['FORMAL', 'INFORMAL', 'OFF'], value='OFF').props('inline')
-            rec_area = ui.textarea(label='Recognized text').props('outlined clearable').classes('shadow-border')
-            summ_area = ui.textarea(label='Summary text').props('outlined clearable').classes('shadow-border')
+
+            rec_area = ui.textarea(
+                label='Recognized text',
+                on_change=lambda e: _area_handler(e, summ_area, sum_btn),
+            ).props('outlined clearable').classes('shadow-border')
+            summ_area = ui.textarea(
+                label='Summary text',
+                on_change=lambda e: _area_handler(e, rec_area, sum_btn)
+            ).props('outlined clearable').classes('shadow-border')
+
             sum_btn = ui.button(
                 'Summarize',
                 on_click=lambda e: _summarize(
@@ -223,6 +247,7 @@ async def _show_mainpage(request: Request) -> None:
                     radio_value=transform_radio.value,
                 )
             )
+
             ui.button(
                 'Download file',
                 on_click=lambda _: _download_file(text=summ_area.value)
@@ -231,6 +256,7 @@ async def _show_mainpage(request: Request) -> None:
                 target_name='value',
                 backward=lambda x: x != '',
             ).classes('download-btn')
+
             spin = ui.spinner(
                 type='ios',
                 size='3em',
