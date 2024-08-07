@@ -256,7 +256,7 @@ async def _show_mainpage(request: Request) -> None:
                         summ_area=summ_area,
                         download_btn=download_btn,
                     ),
-                ).classes('download-btn').bind_enabled_from(sum_btn)
+                ).classes('clear-btn').bind_enabled_from(sum_btn)
 
                 download_btn = ui.button(
                     'Download file',
