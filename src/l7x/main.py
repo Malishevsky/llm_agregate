@@ -84,8 +84,8 @@ async def _run_worker_processes(
 
     descriptions: Final[list[WorkerDescription[WorkerParams]]] = []
 
-    metrics_cmd_manager: Final = CmdManagerImpl[BaseCmdGlobalContext, None, BaseCmdLocalContext](
-        name_prefix='metrics_cmd_processor_',
+    llm_cmd_manager: Final = CmdManagerImpl[BaseCmdGlobalContext, None, BaseCmdLocalContext](
+        name_prefix='llm_cmd_processor_',
         global_context_creator=creator_base_global_cmd_context,
         global_context_creator_additional_params=None,
         local_context_creator=creator_local_tokens_cmd_context,
@@ -94,7 +94,7 @@ async def _run_worker_processes(
         logger=logger,
         app_settings=app_settings,
     )
-    descriptions.extend(metrics_cmd_manager.worker_descriptions)
+    descriptions.extend(llm_cmd_manager.worker_descriptions)
 
     for worker_index in range(app_settings.worker_count):
         web_work_desc = WorkerDescription(
@@ -104,7 +104,7 @@ async def _run_worker_processes(
                 app_settings=app_settings,
                 sockets=web_sockets,
                 hypercorn_config=hypercorn_config,
-                cmd_manager=metrics_cmd_manager,
+                cmd_manager=llm_cmd_manager,
             ),
             worker_type=WorkerType.PROCESS,
         )

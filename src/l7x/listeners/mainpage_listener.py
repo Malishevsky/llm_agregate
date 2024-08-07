@@ -49,8 +49,9 @@ class LlmProcessCommand(BaseCommand):
         model: Final[PreTrainedModel] = global_context.model
         tokenizer: Final[PreTrainedTokenizer] = global_context.tokenizer
         prompts_per_language: Final = global_context.app_settings.prompts_per_language
-        prompts: Final = prompts_per_language.get(self.language)
+        prompts: Final = prompts_per_language.get(self.language, prompts_per_language['base'])
         if prompts is None:
+            global_context.logger.warning('Prompts not found')
             return
 
         # sum_system_prompt = "Please summarize the text, highlighting the main topic, key points, and supporting details. Ensure your response is concise, accurate, and easy to understand. Your respond must be in the same language as the original sentence."
