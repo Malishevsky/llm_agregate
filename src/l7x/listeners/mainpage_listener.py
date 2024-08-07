@@ -142,9 +142,24 @@ async def _summarize(
 
 #####################################################################################################
 
-async def _download_file(text: str, audio_file_name: str):
+def _add_text_with_bold(doc, text, heading: str | None = None):
+    if heading is not None:
+        doc.add_heading(heading)
+    para = doc.add_paragraph()
+    parts = text.split("**")
+    for i, part in enumerate(parts):
+        if i % 2 == 0:
+            para.add_run(part)
+        else:
+            run = para.add_run(part)
+            run.bold = True
+
+#####################################################################################################
+
+async def _download_file(rec_text: str, sum_text: str, audio_file_name: str):
     doc = Document()
-    doc.add_paragraph(text)
+    _add_text_with_bold(doc, rec_text, heading='Recognized Text')
+    _add_text_with_bold(doc, sum_text, heading='Summarized Text')
     io_buffer = BytesIO()
     doc.save(io_buffer)
     io_buffer.seek(0)
