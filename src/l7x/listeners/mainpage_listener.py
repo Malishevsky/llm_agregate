@@ -177,12 +177,10 @@ async def _download_file(text):
 
 #####################################################################################################
 
-async def _area_handler(event, second_area, download_btn):
-    event_text = event.value
-    print('handler')
-    if not event_text:
-        second_area.value = ''
-        download_btn.set_visibility(False)
+async def _clear_handler(rec_area: Textarea, summ_area: Textarea, download_btn: Button):
+    rec_area.set_value('')
+    summ_area.set_value('')
+    download_btn.set_visibility(False)
 
 #####################################################################################################
 
@@ -230,28 +228,33 @@ async def _show_mainpage(request: Request) -> None:
 
             rec_area = ui.textarea(
                 label='Recognized text',
-                on_change=lambda e: _area_handler(e, summ_area, download_btn),
-            ).props('outlined clearable readonly').classes('shadow-border')
+            ).props('outlined readonly').classes('shadow-border')
             summ_area = ui.textarea(
                 label='Summary text',
-                on_change=lambda e: _area_handler(e, rec_area, download_btn)
-            ).props('outlined clearable readonly').classes('shadow-border')
-
-            sum_btn = ui.button(
-                'Summarize',
-                on_click=lambda e: _summarize(
-                    summ_btn=e.sender,
-                    language=language,
-                    app=app,
-                    audio_data=audio_file_data,
-                    recognizer_area=rec_area,
-                    summarized_area=summ_area,
-                    radio_value=transform_radio.value,
-                )
-            )
+            ).props('outlined readonly').classes('shadow-border')
+            with ui.row():
+                sum_btn = ui.button(
+                    'Summarize',
+                    icon='summarize',
+                    on_click=lambda e: _summarize(
+                        summ_btn=e.sender,
+                        language=language,
+                        app=app,
+                        audio_data=audio_file_data,
+                        recognizer_area=rec_area,
+                        summarized_area=summ_area,
+                        radio_value=transform_radio.value,
+                    )
+                ).classes('w-full')
+                ui.button('Clear', icon='delete', on_click=lambda _: _clear_handler(
+                    rec_area=rec_area,
+                    summ_area=summ_area,
+                    download_btn=download_btn,
+                )).classes('w-full')
 
             download_btn = ui.button(
                 'Download file',
+                icon='download',
                 on_click=lambda _: _download_file(text=summ_area.value)
             ).bind_visibility_from(
                 summ_area,

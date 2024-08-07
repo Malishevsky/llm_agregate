@@ -33,6 +33,10 @@ textarea{
     border: none;
 }
 
+.q-field--outlined.q-field--readonly .q-field__control:before {
+    border-style: none;
+}
+
 .download-btn {
     background: rgba(95, 222, 21, 0.87) !important;
 }
