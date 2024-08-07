@@ -246,11 +246,15 @@ async def _show_mainpage(request: Request) -> None:
                         radio_value=transform_radio.value,
                     )
                 )
-                ui.button('Clear', icon='delete', on_click=lambda _: _clear_handler(
-                    rec_area=rec_area,
-                    summ_area=summ_area,
-                    download_btn=download_btn,
-                )).classes('download-btn')
+                ui.button(
+                    'Clear',
+                    icon='delete',
+                    on_click=lambda _: _clear_handler(
+                        rec_area=rec_area,
+                        summ_area=summ_area,
+                        download_btn=download_btn,
+                    ),
+                ).classes('download-btn').bind_enabled_from(sum_btn)
 
                 download_btn = ui.button(
                     'Download file',
