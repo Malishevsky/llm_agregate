@@ -179,7 +179,8 @@ async def _download_file(text):
 
 async def _area_handler(event, second_area, download_btn):
     event_text = event.value
-    if event_text == '':
+    print('handler')
+    if not event_text:
         second_area.value = ''
         download_btn.set_visibility(False)
 
@@ -229,12 +230,12 @@ async def _show_mainpage(request: Request) -> None:
 
             rec_area = ui.textarea(
                 label='Recognized text',
-                on_change=lambda e: _area_handler(e, summ_area, sum_btn),
-            ).props('outlined clearable').classes('shadow-border')
+                on_change=lambda e: _area_handler(e, summ_area, download_btn),
+            ).props('outlined clearable readonly').classes('shadow-border')
             summ_area = ui.textarea(
                 label='Summary text',
-                on_change=lambda e: _area_handler(e, rec_area, sum_btn)
-            ).props('outlined clearable').classes('shadow-border')
+                on_change=lambda e: _area_handler(e, rec_area, download_btn)
+            ).props('outlined clearable readonly').classes('shadow-border')
 
             sum_btn = ui.button(
                 'Summarize',
@@ -249,7 +250,7 @@ async def _show_mainpage(request: Request) -> None:
                 )
             )
 
-            ui.button(
+            download_btn = ui.button(
                 'Download file',
                 on_click=lambda _: _download_file(text=summ_area.value)
             ).bind_visibility_from(
