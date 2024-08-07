@@ -114,7 +114,7 @@ async def _summarize(
                 wav=audio_data.file,
                 language=language,
             ),
-            timeout=60,
+            timeout=180,
         )
         recognizer_area.set_value(recognized_text)
         await sleep(0.2)
@@ -128,7 +128,7 @@ async def _summarize(
         loop = get_running_loop()
         send_and_wait_result = partial(
             app.cmd_manager.send_and_wait_result,
-            call_timeout_sec=120,
+            call_timeout_sec=180,
         )
         summary_text = await loop.run_in_executor(None, send_and_wait_result, llm_cmd)
         summarized_area.set_value(summary_text)
