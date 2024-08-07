@@ -1,6 +1,7 @@
 ####################################################################################################
 import asyncio
 import base64
+import os
 from asyncio import sleep, get_running_loop
 from functools import partial
 from io import BytesIO
@@ -141,13 +142,14 @@ async def _summarize(
 
 #####################################################################################################
 
-async def _download_file(text):
+async def _download_file(text: str, audio_file_name: str):
     doc = Document()
     doc.add_paragraph(text)
     io_buffer = BytesIO()
     doc.save(io_buffer)
     io_buffer.seek(0)
     base64_string = base64.b64encode(io_buffer.read()).decode('utf-8')
+    doc_file_name = os.path.splitext(audio_file_name)[0] + '_summarized.docx'
     await ui.run_javascript(f'''
         return await (async () => {{
             try {{
@@ -167,7 +169,7 @@ async def _download_file(text):
                     document.body.removeChild(link);
                     window.URL.revokeObjectURL(link.href);
                 }};
-                await saveBase64File("{base64_string}", 'filename.docx');
+                await saveBase64File("{base64_string}", "{doc_file_name}");
                 return {{ success: true }};
             }} catch (error) {{
                 throw new Error(error);
@@ -259,7 +261,7 @@ async def _show_mainpage(request: Request) -> None:
                 download_btn = ui.button(
                     'Download file',
                     icon='download',
-                    on_click=lambda _: _download_file(text=summ_area.value)
+                    on_click=lambda _: _download_file(text=summ_area.value, audio_file_name=audio_file_data.name)
                 ).bind_visibility_from(
                     summ_area,
                     target_name='value',
